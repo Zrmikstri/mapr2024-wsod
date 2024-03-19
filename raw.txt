@@ -1,0 +1,37 @@
+Weakly Supervised Object Detection using Class Activation Maps
+
+ABSTRACT
+Class activation map helps visualize the region of a given object category in an image that an accurate classifier uses for prediction. The original work also extended this method to solve weakly supervised object localization. However, results have shown that class activation map only shows the discriminative part of an object instead of the whole object. Recent proposed solutions help alleviate this problem and allow class activation map to achieve state-of-the-art localization performance. In this paper, we take advantage of those solutions and propose modifications to use CAM for detecting multiple objects instead. The proposed modification achieves promising results on PASCAL VOC 2007 and 2012.
+
+I. INTRODUCTION
+hide [Object detection is one of popular computer vision task. It aims to detect and label objects in an image. With the development of deep learning, more and more methods with significant performance, fast inference time have been introduced. Fully supervised approaches \cite{}, \cite{} require bounding box annotations for each object in an image. This often combines with large datasets require a lot of time and effort to collect and label. On the other hand, weakly supervised approaches only require image-level labels as training data. This alternative makes weakly supervised approaches more practical and cost-effective.]
+
+Class Activation Map (CAM) introduced by Zhou et al. \cite{} to visualize the region of a given object category in an image. This method utilizes the weights from the fully connected layer and the feature maps before the global average pooling layer to generate CAM. CAM allows us to know which region of the image is used by an accurate classifier to make a prediction. Zhou et al. extended their work to solve weakly supervised object localization (WSOL). WSOL aims to find a region of a targeted object in an image using image-level labels as training data. Weakly supervised approaches are great alternatives to fully supervised approaches \cite{} as they require less effort and cost to collect, label, and train data.
+
+However, research has shown that CAM only highlights the most discriminative part of an image, thus affecting the localization performance. Kim et al. \cite{} solved this problem by addressing issues when training a classifier to generate CAM. The proposed method expands the discriminative region to the whole object, thus achieving state-of-the-art localization performance on ImageNet-1k \cite{} and CUB-200-2011 \cite{}. Another solution from Yang et al. \cite{} is to use a function to combine CAM from different categories.
+
+Although the discriminative part has been solved, CAM only focuses on finding the region of a single object. Utilizing Kim et al. \cite{} work, we propose modifications to use CAM for object detection instead of object localization. 
+
+In summary, the contributions of this paper are as follows:
+- We propose a way to combine briding \cite{} and ccam \cite{} to use CAM for object detection instead of object localization.
+- We show how using Otsu as a post-processing step can affect the result of the proposed method.
+- We also build a simple demo to show the result of the proposed method.
+
+II. RELATED WORK
+
+III. PRPOSED METHOD
+
+IV. EXPERIMENTS
+Datasets. To evaluate the propose method, we conducted experiments on PASCAL VOC 2007 \cite{} and 2012 \cite{} datasets. The PASCAL VOC 2007 dataset contains 9,963 images and 20 object categories. The PASCAL VOC 2012 dataset contains 11,540 images 20 object categories. 
+
+Evaluation Metrics. We used AUPRC (Area Under Precision-Recall Curve) to evaluate the classification performance of the proposed method. AUPRC is calculated by average each object categories' precision-recall curve. We also used COCO mAP \cite{} (mean Average Precision) to evaluate the object detection performance of the proposed method. COCO mAP is one of the metrics proposed in the Microsoft COCO challenge by Lin et al. \cite{}. 
+
+Implementation Details. 
+
+V. CONCLUSION
+In this paper, we propose modifications to Kim et al. \cite {} work to use CAM for object detection instead of object localization in the original work. We conduct experiments on PASCAL VOC 2007 and 2012 datasets and achieve promising results. We also show that our modifications enable CAM to detect multiple objects in a single image. In the future, we plan to focus on working on occluded objects and tight objects to improve the result.
+
+Acknowledgements
+We would like to thank our advisor ... Thanh Duc Ngo and ... Dung Tien Mai for their invaluable support and guidance. We would also like to thank every member of the lab for their helpful comments and suggestions. 
+
+References
