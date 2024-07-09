@@ -26,7 +26,7 @@
 \maketitle
 
 \begin{abstract}
-    Class activation map helps visualize the region of a given object category in an image that an accurate classifier uses for prediction. The original work also extended this method to solve weakly supervised object localization. However, results have shown that class activation map only shows the discriminative part of an object instead of the whole object. Recent proposed solutions help alleviate this problem and allow class activation map to achieve state-of-the-art localizing performance. In this paper, we take advantage of those solutions and propose modifications to use CAM for detecting multiple objects instead.
+    Class activation map helps visualize the region of a given object category in an image that an accurate classifier uses for prediction. The original work also extended this method to solve weakly supervised object localization. However, results have shown that class activation map only shows the discriminative part of an object instead of the whole object. Recent proposed solutions help alleviate this problem and allow class activation map to achieve state-of-the-art localizing performance. In this paper, we take advantage of those solutions and propose modifications to use CAM for object detection instead.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -186,12 +186,12 @@ We also train both original multi-class architecture \cite{zhou2015cnnlocalizati
         {CAM                                                          \\ }             & \includegraphics[width=\linewidth]{Figures/475_0_person_cam.png}            & \includegraphics[width=\linewidth]{Figures/499_2_cow_cam.png}            & \includegraphics[width=\linewidth]{Figures/259_4_bicycle_cam.png}         & \includegraphics[width=\linewidth]{Figures/3_4_person_cam.png} & \includegraphics[width=\linewidth]{Figures/208_2_motorbike_cam.png}\\
          & a) person & b) cow & c) bicycle & d) person & e) motorbike \\
     \end{tblr}
-    \caption{Comparison between global thresholding, Otsu thresholding. Green boxes denote ground truth, red boxes denote predicted bounding boxes.}
+    \caption{Results of global thresholding, Otsu thresholding. Green boxes denote ground truth, red boxes denote predicted bounding boxes.}
     \label{fig:img result}
 \end{figure*}
 
 \subsection{Architecture}
-We use most of the architecture from Kim et al. \cite{kim2022bridging} work. Fig. \ref{fig:architecture}. show our proposed modification. We modify the fully connected layer to predict the presence or absence of multiple classes using sigmoid activation function. However, both norm loss and similarity loss are class-specific, so we need to modify the loss function to accommodate multi-label classification. The modification is simply average the loss of each present class:
+We use most of the architecture from Kim et al. \cite{kim2022bridging} work. Fig. \ref{fig:architecture}. shows our proposed modification. We modify the fully connected layer to predict the presence or absence of multiple classes using sigmoid activation function. However, both norm loss and similarity loss are class-specific, so we need to modify the loss function to accommodate multi-label classification. The modification is simply average the loss of each present class:
 
 \begin{gather} \label{eq:modified loss}
     \begin{align}
@@ -226,7 +226,7 @@ Another issue is that confidence score, typically output by object detection mod
 
 \begin{table}[t]
     \centering
-    \caption{classification result on VOC 2007}
+    \caption{classification results on VOC 2007}
     \label{tab:classification_map_voc_2007}
     \begin{tabular}{|c|l|c|c|}
         \hline
@@ -256,7 +256,7 @@ Another issue is that confidence score, typically output by object detection mod
 
 \begin{table}[t]
     \centering
-    \caption{classification result on voc 2012}
+    \caption{classification results on voc 2012}
     \label{tab:classification_map_voc_2012}
     \begin{tabular}{|c|l|c|}
         \hline
@@ -328,11 +328,11 @@ Meanwhile, on the VOC 2012 dataset, the results are even less promising. For cla
     \end{tabular}
 \end{table}
 
-Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gaussian_ksize_map_voc_2007_test}, \ref{tab:different_gaussian_ksize_map_voc_2012_val} compare the performance of global thresholding and Otsu thresholding on VOC 2007 and 2012. Our proposed modifications tend to benefit from using Otsu thresholding instead of global thresholding, especially with the ResNet50 backbone. The improvements are modest but consistent across validation and test sets of both datasets. However, the original single-label methods generally suffer a drop in performance when applying Otsu thresholding.
+Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gaussian_ksize_map_voc_2007_test}, \ref{tab:different_gaussian_ksize_map_voc_2012_val} show the performance difference between Otsu thresholding and global thresholding on VOC 2007 and 2012. The values represent the Otsu thresholding results minus the global thresholding results. Our proposed modifications tend to benefit from using Otsu thresholding instead of global thresholding, especially with the ResNet50 backbone. The improvements are modest but consistent across validation and test sets of both datasets. However, the original single-label methods generally suffer a drop in performance when applying Otsu thresholding.
 
 \begin{table}[t]
     \centering
-    \caption{Comparison between global thresholding and Otsu thresholding on VOC 2007 (val)}
+    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2007 (val)}
     \label{tab:different_gaussian_ksize_map_voc_2007_val}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
@@ -355,7 +355,7 @@ Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gau
 
 \begin{table}[t]
     \centering
-    \caption{Comparison between global thresholding and Otsu thresholding on VOC 2007 (test)}
+    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2007 (test)}
     \label{tab:different_gaussian_ksize_map_voc_2007_test}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
@@ -378,7 +378,7 @@ Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gau
 
 \begin{table}[t]
     \centering
-    \caption{ Comparison between global thresholding and Otsu thresholding on VOC 2012 (val) }
+    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2012 (val) }
     \label{tab:different_gaussian_ksize_map_voc_2012_val}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
