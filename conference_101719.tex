@@ -21,12 +21,49 @@
     % should not be used}
 }
 
-\author{Anonymous Author Submission}
+% \author{Anonymous Author Submission}
+\author{\IEEEauthorblockN{1\textsuperscript{st} Vinh Phu Tran}
+    \IEEEauthorblockA{
+        % \textit{dept. name of organization (of Aff.)} \\
+        \textit{University of Information Technology, VNU}\\
+        % \textit{Vietnam National University}\\
+        Ho Chi Minh City, Vietnam\\
+        20522161@gm.uit.edu.vn
+    }
+    \and
+    \IEEEauthorblockN{2\textsuperscript{nd} Tuan Tran Anh Dao}
+    \IEEEauthorblockA{
+        % \textit{dept. name of organization (of Aff.)} \\
+        \textit{University of Information Technology, VNU}\\
+        % \textit{Vietnam National University}\\
+        Ho Chi Minh City, Vietnam\\
+        20522107@gm.uit.edu.vn
+    }
+    \and
+    \IEEEauthorblockN{3\textsuperscript{rd} Tien Dung Mai}
+    \IEEEauthorblockA{
+        % \textit{dept. name of organization (of Aff.)} \\
+        \textit{University of Information Technology, VNU}\\
+        % \textit{Vietnam National University}\\
+        Ho Chi Minh City, Vietnam\\
+        dungmt@uit.edu.vn
+    }
+    \and
+    \IEEEauthorblockN{4\textsuperscript{th} Thanh Duc Ngo}
+    \IEEEauthorblockA{
+        % \textit{dept. name of organization (of Aff.)} \\
+        \textit{University of Information Technology, VNU}\\
+        % \textit{Vietnam National University}\\
+        Ho Chi Minh City, Vietnam\\
+        thanhnd@uit.edu.vn
+    }
+}
+
 
 \maketitle
 
 \begin{abstract}
-    Class activation map helps visualize the region of a given object category in an image that an accurate classifier uses for prediction. The original work also extended this method to solve weakly supervised object localization. However, results have shown that class activation map only shows the discriminative part of an object instead of the whole object. Recent proposed solutions help alleviate this problem and allow class activation map to achieve state-of-the-art localizing performance. In this paper, we take advantage of those solutions and propose modifications to use CAM for object detection instead.
+    Class activation maps help visualize the region of a given object category in an image that an accurate classifier uses for prediction. The original work of Zhou et al. \cite{zhou2015cnnlocalization} extended this method to solve weakly supervised object localization. However, results have shown that class activation maps only show the discriminative parts of a target object instead of the whole object. Recently proposed solutions help alleviate this problem and allow class activation maps to achieve state-of-the-art localization performance. In this paper, we take advantage of Kim et al.'s \cite{kim2022bridging} solution and propose modifications to use CAM for object detection.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -34,11 +71,11 @@
 \end{IEEEkeywords}
 
 \section{Introduction}
-Class Activation Map (CAM) introduced by Zhou et al. \cite{zhou2015cnnlocalization} to visualize the region of a given object category in an image. This method utilizes the weights from the fully connected layer and the feature maps before the global average pooling layer to generate CAM. CAM allows us to know which region of the image is used by an accurate classifier to make a prediction. Zhou et al. extended their work to solve weakly supervised object localization (WSOL). WSOL aims to find a region of a targeted object in an image using image-level labels as training data. Weakly supervised approaches are great alternatives to fully supervised approaches \cite{Jocher_YOLO_by_Ultralytics_2023} \cite{ren2015faster} as they require less effort and cost to collect, label, and train data.
+Class Activation Maps (CAM) was introduced by Zhou et al. \cite{zhou2015cnnlocalization} to visualize the region of a given object category in an image. This method utilizes the weights from the fully connected layer and the feature maps before the global average pooling layer to generate CAM. CAM allows us to know which region of the image is used by an accurate classifier to make a prediction. Zhou et al. extended their work to solve weakly supervised object localization (WSOL). WSOL aims to find a region of a targeted object in an image using image-level labels as training data. Weakly supervised approaches are great alternatives to fully supervised approaches \cite{Jocher_YOLO_by_Ultralytics_2023} \cite{ren2015faster} as they require less effort and cost to collect, label, and train data.
 
-However, research has shown that CAM only highlights the most discriminative part of an image, thus affecting the localization performance. Kim et al. \cite{kim2022bridging} solved this problem by addressing issues when training a classifier to generate CAM. The proposed method expands the discriminative region to the whole object, thus achieving state-of-the-art localization performance on ImageNet-1k \cite{ILSVRC15} and CUB-200-2011 \cite{WahCUB_200_2011}. Another solution from Yang et al. \cite{yang2019combinational} is to use a function to combine CAM from different categories.
+However, research has shown that CAM only highlights the most discriminative parts of an image, thus affecting the localization performance. Kim et al. \cite{kim2022bridging} solved this problem by addressing issues when training a classifier to generate CAM. The proposed method expands the discriminative region to the whole object, thus achieving state-of-the-art localization performance on ImageNet-1k \cite{ILSVRC15} and CUB-200-2011 \cite{WahCUB_200_2011}. Another solution from Yang et al. \cite{yang2019combinational} is to use a function to combine CAM from different categories.
 
-Although the discriminative part has been solved, CAM only focuses on finding the region of a single object. Utilizing Kim et al. \cite{kim2022bridging} work, we propose modifications to use CAM for object detection instead of object localization.
+Although the discriminative parts issue has been solved, CAM only focuses on finding the region of a single object. Utilizing Kim et al. \cite{kim2022bridging} work, we propose modifications to use CAM for object detection instead of object localization.
 
 In summary, the contributions of this paper are as follows:
 \begin{itemize}
@@ -53,7 +90,7 @@ In summary, the contributions of this paper are as follows:
 MIL-based techniques \cite{DBLP:journals/corr/BilenV15}, \cite{tang2017multiple}, \cite{wang2022d2df2wod}, \cite{huang2022w2nswitching} treat an image as a bag of region proposals or instances, where at least one instance should contain the object of interest. These methods iteratively learn to classify the proposals and refine the object localization.
 
 \textbf{CAM-based}
-On the other hand, CAM-based approaches \cite{zhou2015cnnlocalization}, \cite{kim2022bridging}, \cite{yang2019combinational} leverage class activation maps generated from classification networks to localize discriminative object regions. However, vanilla CAM often highlights only the most discriminative parts rather than full object extents. Several works have proposed solutions to this issue, either by introducing auxiliary losses [Kim et al., 2022] to encourage complete object activation or by combining activation maps across categories [Yang et al., 2019].
+On the other hand, CAM-based approaches \cite{zhou2015cnnlocalization}, \cite{yang2019combinational}, \cite{Bae:2020:RethinkingCAM}, \cite{kim2022bridging}, \cite{xu2022creamweaklysupervisedobject} leverage class activation maps generated from classification networks to localize discriminative object regions. However, vanilla CAM often highlights only the most discriminative parts rather than full object extents. Several works have proposed solutions to this issue. Yang et al. \cite{yang2019combinational} introduced Combinational Class Activation Maps (CCAM), which combine activation maps from multiple probability classes to suppress background regions. Bae et al. \cite{Bae:2020:RethinkingCAM} proposed thresholded average pooling, negative weight clamping, and percentile thresholding. Kim et al. \cite{kim2022bridging} introduced auxiliary losses and Attentive Dropout to align feature directions with a class-specific weight.  CREAM \cite{xu2022creamweaklysupervisedobject}, a clustering-based method, introduced class-specific foreground and background context embeddings during training, and solved the re-activation mapping using an unsupervised Expectation-Maximization based soft-clustering algorithm during inference.
 
 Our proposed multi-label formulation is motivated by the fact that many object detection datasets contain images with multiple object categories present. By extending CAM to multi-label classification, we aim to improve the localization performance of WSOD methods on such datasets.
 
@@ -73,11 +110,11 @@ CAM is then generated by taking the weighted sum of the feature maps from the la
 \end{equation}
 where $\mathbf{w}_c$ is the weight of the $c$-th class and $F(x) \in \mathbb{R}^{H \times W \times D}$ is the feature map of the last convolutional layer.
 
-However, it is widely observed that CAM only highlights the most discriminative part of an object. This drawback affects the localization performance of CAM thus detection performance also affected.
+However, it is widely observed that CAM only highlights the most discriminative part of an object. This drawback affects the localization performance of CAM, thus detection performance also affected.
 
 
 \subsection{Bridging the Gap between Classification and Localization for Weakly Supervised Object Localization}
-Although CAM is generated from an accurate classifier, the classification performance does not translate to localization performance. To address this issue, Kim et al. \cite{kim2022bridging} first interpreted CAM as the degree of aligment between the direction of input features and the direction of class-specific vectors.
+Although CAM is generated from an accurate classifier, the classification performance does not translate to localization performance. To address this issue, Kim et al. \cite{kim2022bridging} first interpreted CAM as the degree of alignment between the direction of input features and the direction of class-specific vectors.
 
 Kim et al. interpreted from Eq. \ref{eq:cam} that the value of CAM at each spatial location $u \in \{1, \dots, HW\}$ is the dot product between the feature map at that location and the weight of the class. From that, they decomposed Eq. \ref{eq:cam} further:
 
@@ -102,7 +139,7 @@ Likewise, the classification score calculated from GAP output, $f(x) = GAP(F(x))
     \end{split}
 \end{equation}
 
-Because $f(x)$ is fixed for $x$, the scale variation of $||\mathbf{w}_c||$ across each class $c$ is not large so the similarity between $||mathbf{w}_c||$ and $f(x)$ need to be large for $c$ to be predicted. Here, Kim et al. found that the classifier is trained to maximize the similarity between weights of a class and the output of the GAP. This lead to the model only localize discriminative part of the object. To brigde this gap, Kim et al. proposed two method: align feature directions and consistency with attentive dropout. The former method introduce two loss that complement each other: norm loss and similarity loss. The latter method introduce a dropout layer to the model architecture when training.
+Because $f(x)$ is fixed for $x$, the scale variation of $||\mathbf{w}_c||$ across each class $c$ is not large so the similarity between $||\mathbf{w}_c||$ and $f(x)$ needs to be large for $c$ to be predicted. Here, Kim et al. found that the classifier is trained to maximize the similarity between weights of a class and the output of the GAP. This leads to the model only localizing discriminative parts of the object. To bridge this gap, Kim et al. proposed two methods: align feature directions and consistency with attentive dropout. The former method introduce two loss that complement each other: norm loss and similarity loss. The latter method introduce a dropout layer to the model architecture when training.
 
 \begin{figure*}
     \centering
@@ -112,7 +149,7 @@ Because $f(x)$ is fixed for $x$, the scale variation of $||\mathbf{w}_c||$ acros
 \end{figure*}
 
 \subsubsection{Similarity loss}
-Similarity loss aims to increasing the similarity in foreground region and suppress it in background region based on high and low value region on a normalized $\mathcal{F}$. Similarity loss helps expand the activation region to the whole object.
+Similarity loss aims to increase the similarity in the foreground region and suppress it in the background region based on high and low value region on a normalized $\mathcal{F}$. Similarity loss helps expand the activation region to the whole object.
 
 \begin{gather} \label{eq:sim loss}
     \begin{aligned}
@@ -124,7 +161,7 @@ Similarity loss aims to increasing the similarity in foreground region and suppr
 \end{gather}
 
 \subsubsection{Norm loss}
-Norm loss aims to active area in object region and suppress in background region in $\hat{\mathcal{F}}$ based on positive and negative region estimated from $S_u$.
+Norm loss aims to activate areas in the object region and suppress in the background region in $\hat{\mathcal{F}}$ based on positive and negative region estimated from $S_u$.
 
 \begin{gather} \label{eq:norm loss}
     \begin{aligned}
@@ -136,7 +173,7 @@ Norm loss aims to active area in object region and suppress in background region
 
 
 \subsubsection{Consistency with Attentive Dropout}
-Kim et al. \cite{kim2022bridging} introduces a dropout layer between the backbone's layer in the training process. This dropout layer stochastically dropping the activation of an itermediate feature map $\mathcal{F}'$ at the spatial location of whose channel-wised average value is highers than a threshold. Then $\mathcal{F}'$ is passed through the rest of the model's backbone to attain $\mathcal{F}_{drop}$. Finally, $\mathcal{L}_1$ loss is calculated between $\mathcal{F}_{drop}$ and $\mathcal{F}$.
+Kim et al. \cite{kim2022bridging} introduce a dropout layer between the backbone's layer in the training process. This dropout layer stochastically drops the activation of an intermediate feature map $\mathcal{F}'$ at the spatial location of whose channel-wise average value is higher than a threshold. Then $\mathcal{F}'$ is passed through the rest of the model's backbone to attain $\mathcal{F}_{drop}$. Finally, $\mathcal{L}_1$ loss is calculated between $\mathcal{F}_{drop}$ and $\mathcal{F}$.
 
 \begin{equation} \label{eq:drop loss}
     \mathcal{L}_{drop} = ||F(x) - F(x)_{drop}||_1
@@ -149,7 +186,7 @@ The final loss function is the combination of CE loss, similarity loss, norm los
     \mathcal{L}_{total} = \mathcal{L}_{\text{CE}} + \lambda_{\text{sim}}\mathcal{L}_{\text{sim}} + \lambda_{\text{norm}}\mathcal{L}_{\text{norm}} + \lambda_{\text{drop}}\mathcal{L}_{\text{drop}}
 \end{equation}
 
-The model need to be trained for a few epoch without the feature direction alignment loss in order to stabilize feature map for classification. Then, the feature direction alignment loss is added to the total loss function.
+The model needs to be trained for a few epochs without the feature direction alignment loss in order to stabilize the feature map for classification. Then, the feature direction alignment loss is added to the total loss function.
 
 \begin{equation}
     \mathcal{L}_{warm} = \mathcal{L}_{\text{CE}} + \lambda_{\text{drop}}\mathcal{L}_{\text{drop}}
@@ -172,7 +209,7 @@ In the original work by Zhou et al. \cite{zhou2015cnnlocalization}, CAMs were in
     \mathcal{L}_{\text{BCE}} = -\sum_{i}^{C}{y_i \log(\sigma(s_i))}
 \end{equation}
 
-We also train both original multi-class architecture \cite{zhou2015cnnlocalization} \cite{kim2022bridging} on multi-label dataset to compare with our proposed modification. To achieve this, with each image containing multiple labels, we add duplicate images for each label. For example, an image with labels \{cat, dog\} will be duplicated into two images: one with label cat and another with label dog. This way, the model can learn to predict each label independently and CE loss can be used as proposed by both original works.
+We also train both original multi-class architectures \cite{zhou2015cnnlocalization} \cite{kim2022bridging} on multi-label datasets to compare with our proposed modification. To achieve this, with each image containing multiple labels, we add duplicate images for each label. For example, an image with labels \{cat, dog\} will be duplicated into two images: one with label cat and another with label dog. This way, the model can learn to predict each label independently and CE loss can be used as proposed by both original works.
 
 \begin{figure*}
     \centering
@@ -191,7 +228,7 @@ We also train both original multi-class architecture \cite{zhou2015cnnlocalizati
 \end{figure*}
 
 \subsection{Architecture}
-We use most of the architecture from Kim et al. \cite{kim2022bridging} work. Fig. \ref{fig:architecture}. shows our proposed modification. We modify the fully connected layer to predict the presence or absence of multiple classes using sigmoid activation function. However, both norm loss and similarity loss are class-specific, so we need to modify the loss function to accommodate multi-label classification. The modification is simply average the loss of each present class:
+We use most of the architecture from Kim et al. \cite{kim2022bridging} work. Fig. \ref{fig:architecture} shows our proposed modification. We modify the fully connected layer to predict the presence or absence of multiple classes using sigmoid activation function. However, both norm loss and similarity loss are class-specific, so we need to modify the loss function to accommodate multi-label classification. The modification simply averages the loss of each present class:
 
 \begin{gather} \label{eq:modified loss}
     \begin{align}
@@ -199,7 +236,7 @@ We use most of the architecture from Kim et al. \cite{kim2022bridging} work. Fig
         \mathcal{L}'_{\text{norm}} = \frac{1}{n}\sum_{i}^{c}y_i (-\frac{1}{|\mathcal{R}_{\text{fg}}^{\text{sim}}|}\sum_{u\in\mathcal{R}_{\text{fg}}^{\text{sim}}}{\hat{\mathcal{F}_u}} + \frac{1}{|\mathcal{R}_{\text{bg}}^{\text{sim}}|}\sum_{u\in\mathcal{R}_{\text{bg}}^{\text{sim}}}{\hat{\mathcal{F}_u}})
     \end{align}
 \end{gather}
-where $n$ is the number of present classes and $y_i \in \{0, 1\}$ is the groundtruth for each class.
+where $n$ is the number of present classes and $y_i \in \{0, 1\}$ is the ground truth for each class.
 
 We also modify the total loss function Eq. \ref{eq:total loss} to accommodate multi-label classification by changing CE loss to BCE loss:
 
@@ -210,19 +247,9 @@ We also modify the total loss function Eq. \ref{eq:total loss} to accommodate mu
 
 \subsection{Post processing}
 \subsubsection{Threshold method}
-After accquiring CAM, followed Zhou et al. \cite{zhou2015cnnlocalization}, Kim et al. employed a thresholding technique to segment the CAM, retaining only regions with values exceeding a predefined threshold (e.g., 20\%). Then the bounding box covering the contour of the segmented region is extracted as the object localization. However, this thresholding technique is sensitive to the choice of threshold, every CAM may require a different threshold to achieve optimal segmentation. We propose an alternative post-processing step utilizing Otsu's method \cite{otsu}. This method offers a data-driven approach to threshold selection, potentially leading to more robust CAM segmentation. We apply Gaussian filtering to the CAM to reduce noise before applying Otsu's method. The resulting binary image is then used to extract the bounding box.
+After acquiring CAM, following Zhou et al. \cite{zhou2015cnnlocalization}, Kim et al. \cite{kim2022bridging} employed a thresholding technique to segment the CAM, retaining only regions with values exceeding a predefined threshold (e.g., 20\%). Then the bounding box covering the contour of the segmented region is extracted as the object localization. However, this thresholding technique is sensitive to the choice of threshold, every CAM may require a different threshold to achieve optimal segmentation. We propose an alternative post-processing step utilizing Otsu's method \cite{otsu}. This method offers a data-driven approach to threshold selection, potentially leading to more robust CAM segmentation. We apply Gaussian filtering to the CAM to reduce noise before applying Otsu's method. The resulting binary image is then used to extract the bounding box.
 
 To acquire the original threshold method \cite{zhou2015cnnlocalization} result, we run evaluation on multiple threshold $0 \leq \tau < 1$ and report the highest result. As for Otsu's method, the Gaussian filter requires a kernel size $k$. We run evaluation on multiple $k$ and report the highest result.
-
-
-
-\subsubsection{Bounding box generation}
-Kim et al. \cite{kim2022bridging} utilize all contours for bounding box generation. However, in certain scenarios, imperfect CAM segmentation can introduce background regions within the object area. This results in two bounding boxes: one encompassing the outer region's contour and another for the inner region. We propose leveraging the bounding box generated from the external contour to represent the object of interest.
-
-\subsubsection{Confidence score}
-Another issue is that confidence score, typically output by object detection models, for each bounding box is not calculated. This lead to difficulty in evaluating the model's performance with COCO mAP \cite{lin2015microsoft}. For the time being, we use class probabilities output by model FC layer as confidence score.
-
-
 
 \begin{table}[t]
     \centering
@@ -244,15 +271,6 @@ Another issue is that confidence score, typically output by object detection mod
         \hline
     \end{tabular}
 \end{table}
-
-\section{Experiments}
-\subsection{Experimental Setup}
-\textbf{Dataset.} We perform our modifications on two popular multi-label classification datasets: PASCAL VOC 2007 \cite{pascal-voc-2007} and 2012 \cite{pascal-voc-2012}. There are \num{9963} images in VOC 2007 and \num{11530} images in VOC 2012 which are splitted 50:50 to train/val and test.  Each image contains one or multiple labels from 20 categories.
-
-\textbf{Metric.} We use mAP to evaluate classification performance. mAP is the average of each categories' area under precision and recall curve. For detection, we evaluate using a widely known COCO metric: mAP \cite{lin2015microsoft}.
-
-\textbf{Implementation Details.} We adopt ResNet50 \cite{7780459} and VGG16 \cite{simonyan2015deep} as our backbone. We follow network architecture, hyperparameters setting of the previous work \cite{kim2022bridging}. We resize all images to $224\times224$ before passing to the model. Both backbones are initialized with ImageNet-1k \cite{ILSVRC15} pretrained weights. Each model is trained for 50 epochs with SGD optimizer, learning rate of $0.0001$, weight decay of $0.001$, momentum of $0.9$, and batch size of 16. The implementation is run on Google Colab with Tesla T4 GPU, 16GB of RAM.
-
 
 \begin{table}[t]
     \centering
@@ -296,16 +314,19 @@ Another issue is that confidence score, typically output by object detection mod
     \end{tabular}
 \end{table}
 
+\subsubsection{Bounding box generation}
+Kim et al. \cite{kim2022bridging} utilize all contours for bounding box generation. However, in certain scenarios, imperfect CAM segmentation can introduce background regions within the object area. This results in two bounding boxes: one encompassing the outer region's contour and another for the inner region. We propose leveraging the bounding box generated from the external contour to represent the object of interest.
 
+\subsubsection{Confidence score}
+Another issue is that confidence score, typically output by object detection models, for each bounding box is not calculated. This leads to difficulty in evaluating the model's performance with COCO mAP \cite{lin2015microsoft}. For the time being, we use class probabilities output by model FC layer as confidence score.
 
-\subsection{Results}
+\section{Experiments}
+\subsection{Experimental Setup}
+\textbf{Dataset.} We perform our modifications on two popular multi-label classification datasets: PASCAL VOC 2007 \cite{pascal-voc-2007} and 2012 \cite{pascal-voc-2012}. There are \num{9963} images in VOC 2007 and \num{11530} images in VOC 2012 which are split 50:50 to train/val and test.  Each image contains one or multiple labels from 20 categories.
 
-On VOC 2007 (Tab. \ref{tab:classification_map_voc_2007}), the proposed multi-label modifications classifies better than both multi-class model from the original works \cite{zhou2015cnnlocalization} \cite{kim2022bridging} with ResNet50 backbones. However, the performance is lower than the original multi-class model with VGG16 backbone as both multi-class models only predict a single class per image leading to higher precision, thus higher mAP. For object detection (Tab. \ref{tab:brute_force_cam_threshold_map_voc_2007}), the proposed multi-label modifications show modest improvements over the original methods, but the overall mAP values remain quite low across all methods.
+\textbf{Metric.} We use mAP to evaluate classification performance. mAP is the average of each categories' area under precision and recall curve. For detection, we evaluate using a widely known COCO metric: mAP \cite{lin2015microsoft}.
 
-
-
-Meanwhile, on the VOC 2012 dataset, the results are even less promising. For classification (Tab. \ref{tab:classification_map_voc_2012}), the original methods again outperform the proposed modifications, sometimes by a large margin (e.g. VGG16 backbone with Kim et al. method \cite{kim2022bridging}). For object detection on VOC 2012 (Tab. \ref{tab:brute_force_cam_threshold_map_voc_2012}), while the proposed ResNet50 modification with Kim et al. method \cite{kim2022bridging} achieved the mAP of 8.33\%, it is still very low.
-
+\textbf{Implementation Details.} We adopt ResNet50 \cite{7780459} and VGG16 \cite{simonyan2015deep} as our backbone. We follow network architecture, hyperparameters setting of the previous work \cite{kim2022bridging}. We resize all images to $224\times224$ before passing to the model. Both backbones are initialized with ImageNet-1k \cite{ILSVRC15} pretrained weights. Each model is trained for 50 epochs with SGD optimizer, learning rate of $0.0001$, weight decay of $0.001$, momentum of $0.9$, and batch size of 16. The implementation was run on Google Colab with Tesla T4 GPU, 16GB of RAM.
 
 \begin{table}[t]
     \centering
@@ -328,11 +349,9 @@ Meanwhile, on the VOC 2012 dataset, the results are even less promising. For cla
     \end{tabular}
 \end{table}
 
-Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gaussian_ksize_map_voc_2007_test}, \ref{tab:different_gaussian_ksize_map_voc_2012_val} show the performance difference between Otsu thresholding and global thresholding on VOC 2007 and 2012. The values represent the Otsu thresholding results minus the global thresholding results. Our proposed modifications tend to benefit from using Otsu thresholding instead of global thresholding, especially with the ResNet50 backbone. The improvements are modest but consistent across validation and test sets of both datasets. However, the original single-label methods generally suffer a drop in performance when applying Otsu thresholding.
-
 \begin{table}[t]
     \centering
-    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2007 (val)}
+    \caption{performance difference: otsu thresholding vs global thresholding on voc 2007 (val)}
     \label{tab:different_gaussian_ksize_map_voc_2007_val}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
@@ -353,9 +372,18 @@ Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gau
     }
 \end{table}
 
+
+\subsection{Results}
+
+On VOC 2007 (Tab. \ref{tab:classification_map_voc_2007}), the proposed multi-label modifications classify better than both multi-class models from the original works \cite{zhou2015cnnlocalization} \cite{kim2022bridging} with ResNet50 backbones. However, the performance is lower than the original multi-class model with VGG16 backbone as both multi-class models only predict a single class per image leading to higher precision, thus higher mAP. For object detection (Tab. \ref{tab:brute_force_cam_threshold_map_voc_2007}), the proposed multi-label modifications show modest improvements over the original methods, but the overall mAP values remain quite low across all methods.
+
+Meanwhile, on the VOC 2012 dataset, the results are even less promising. For classification (Tab. \ref{tab:classification_map_voc_2012}), the original methods again outperform the proposed modifications, sometimes by a large margin (e.g. VGG16 backbone with Kim et al. method \cite{kim2022bridging}). For object detection on VOC 2012 (Tab. \ref{tab:brute_force_cam_threshold_map_voc_2012}), while the proposed ResNet50 modification with Kim et al. method \cite{kim2022bridging} achieved the mAP of 8.33\%, it is still very low.
+
+Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val} and \ref{tab:different_gaussian_ksize_map_voc_2007_test} show the performance difference between Otsu thresholding and global thresholding on VOC 2007. Tab. \ref{tab:different_gaussian_ksize_map_voc_2012_val} presents similar comparisons for VOC 2012. The values represent the Otsu thresholding results minus the global thresholding results. Our proposed modifications tend to benefit from using Otsu thresholding instead of global thresholding, especially with the ResNet50 backbone. The improvements are modest but consistent across validation and test sets of both datasets. However, the original single-label methods generally suffer a drop in performance when applying Otsu thresholding.
+
 \begin{table}[t]
     \centering
-    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2007 (test)}
+    \caption{performance difference: otsu thresholding vs global thresholding on voc 2007 (test)}
     \label{tab:different_gaussian_ksize_map_voc_2007_test}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
@@ -378,7 +406,7 @@ Tab. \ref{tab:different_gaussian_ksize_map_voc_2007_val}, \ref{tab:different_gau
 
 \begin{table}[t]
     \centering
-    \caption{performance difference between Otsu thresholding and global thresholding on VOC 2012 (val) }
+    \caption{performance difference: otsu thresholding vs global thresholding on voc 2012 (val)}
     \label{tab:different_gaussian_ksize_map_voc_2012_val}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{|c|l|c|c|c|c|}
@@ -403,7 +431,7 @@ In Fig. \ref{fig:img result}, we show the result of our proposed modifications. 
 
 
 \section{Limitation}
-Our research has produced unsatisfied results in some instances: objects in the same class close together, small objects and occlusion. Our experiments have not been successful on images with adjacent objects because the result obtained after binarizing the CAM will produce a region encompassing all objects. This is a drawback of binarizing the CAM and identifying contours for small objects or obscured objects. We haven't looked into these situations or offered any solutions because of time constraints. These drawbacks lead us to conclude that contour detection and binarization of the CAM are insufficiently efficient methods for identifying objects in a picture.
+Our research has produced unsatisfactory results in some instances: objects of the same class close together, small objects and occlusion. Our experiments were not successful on images with adjacent objects because the result obtained after binarizing the CAM will produce a region encompassing all objects. This is a drawback of binarizing the CAM and identifying contours for small objects or obscured objects. Due to time constraints, we were unable to investigate these situations or offer solutions. These drawbacks lead us to conclude that contour detection and binarization of the CAM are insufficiently efficient methods for identifying objects in a picture.
 
 \section{Conclusions}
 In this paper, we proposed modifications to the CAM-based method by Kim et al. \cite{kim2022bridging} to enable weakly supervised object detection for multiple objects in an image. Our key contributions were: 1) Extending the CAM framework to multi-label classification by using a sigmoid activation and binary cross-entropy loss, and 2) Experimenting with Otsu's adaptive thresholding method \cite{otsu} as an alternative post-processing step to the fixed global thresholding used in previous works.
